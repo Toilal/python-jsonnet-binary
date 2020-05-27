@@ -23,10 +23,10 @@ class BuildCLib(build_clib):
         """Builds the byte-array for stdlib."""
 
         with open("jsonnet/stdlib/std.jsonnet", "rb") as f:
-            stdlib = f.read()
+            stdlib = bytearray(f.read())
         with open("jsonnet/core/std.jsonnet.h", "w") as f:
             for byte in stdlib:
-                f.write(f"{byte},")
+                f.write("%d," % byte)
             f.write("0")
 
     def _patchcflags(self, libraries):
@@ -40,7 +40,7 @@ class BuildCLib(build_clib):
     def build_libraries(self, libraries):
         self._patchcflags(libraries)
         self._buildstdlib()
-        super().build_libraries(libraries)
+        super(BuildCLib, self).build_libraries(libraries)
 
 
 setup(
