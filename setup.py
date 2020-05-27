@@ -2,7 +2,7 @@ from setuptools import Extension, setup
 from setuptools.command.build_clib import build_clib
 
 
-class BuildCLib(build_clib, object):
+class BuildCLib(build_clib):
     """Builds jsonnet library"""
 
     cflags = {
@@ -23,10 +23,10 @@ class BuildCLib(build_clib, object):
         """Builds the byte-array for stdlib."""
 
         with open("jsonnet/stdlib/std.jsonnet", "rb") as f:
-            stdlib = bytearray(f.read())
+            stdlib = f.read()
         with open("jsonnet/core/std.jsonnet.h", "w") as f:
             for byte in stdlib:
-                f.write("%d," % byte)
+                f.write(f"{byte},")
             f.write("0")
 
     def _patchcflags(self, libraries):
@@ -40,7 +40,7 @@ class BuildCLib(build_clib, object):
     def build_libraries(self, libraries):
         self._patchcflags(libraries)
         self._buildstdlib()
-        super(BuildCLib, self).build_libraries(libraries)
+        super().build_libraries(libraries)
 
 
 setup(

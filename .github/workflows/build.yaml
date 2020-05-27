@@ -5,15 +5,15 @@ on: [push, pull_request]
 env:
   TWINE_USERNAME: __token__
   TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+  CIBW_BUILD: cp3?-*
 
 jobs:
   build_wheels:
-    name: Build wheel on ${{ matrix.os }}
+    name: Build wheel on ${{ matrix.os }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        # os: [ubuntu-18.04, windows-latest, macos-latest]
-        os: [windows-latest]
+        os: [ubuntu-18.04, windows-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v2
@@ -32,6 +32,6 @@ jobs:
         with:
           name: wheels
           path: ./wheelhouse
-      # - name: Upload to PyPI
-      #   run: |
-      #     python -m twine upload --verbose --skip-existing ./wheelhouse/*.whl
+      - name: Upload to PyPI
+        run: |
+          python -m twine upload --verbose --skip-existing ./wheelhouse/*.whl
