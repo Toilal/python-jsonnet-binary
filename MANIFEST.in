@@ -1,0 +1,3 @@
+include jsonnet/LICENSE
+include jsonnet/third_party/json/LICENSE
+include jsonnet/third_party/md5/LICENSE
