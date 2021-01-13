@@ -5,7 +5,7 @@ on: [push, pull_request]
 env:
   TWINE_USERNAME: __token__
   TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-  CIBW_BUILD: cp3?-*
+  CIBW_BUILD: cp3?-* pp3?-*
 
 jobs:
   build_wheels:
