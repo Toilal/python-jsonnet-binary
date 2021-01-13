@@ -1,3 +1,5 @@
+import os
+
 from setuptools import Extension, setup
 from setuptools.command.build_clib import build_clib
 
@@ -43,13 +45,30 @@ class BuildCLib(build_clib):
         super(BuildCLib, self).build_libraries(libraries)
 
 
+DIR = os.path.abspath(os.path.dirname(__file__))
+
+
+def get_version():
+    """
+    Parses the version out of libjsonnet.h. This is a copy/paste from official setup.py.
+    """
+    with open(os.path.join(DIR, 'jsonnet/include/libjsonnet.h')) as f:
+        for line in f:
+            if '#define' in line and 'LIB_JSONNET_VERSION' in line:
+                v_code = line.partition('LIB_JSONNET_VERSION')[2].strip('\n "')
+                if v_code[0] == "v":
+                    v_code = v_code[1:]
+                return v_code
+
+
 setup(
     name="jsonnetbin",
     url="https://github.com/mcovalt/jsonnetbin",
-    description="An UNOFFICIAL Python interface to Jsonnet.",
+    description="An UNOFFICIAL Python interface to Jsonnet, "
+                "available as whl packages for Mac, Linux and Windows.",
     author="Matt Covalt",
     author_email="mcovalt@mailbox.org",
-    version="v0.16.0",
+    version=get_version(),
     ext_modules=[
         Extension(
             "_jsonnet",
