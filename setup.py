@@ -51,7 +51,7 @@ with open(os.path.join(DIR, 'README.md'), encoding='utf-8') as f:
     readme = f.read()
 
 
-def get_version():
+def get_libjsonnet_version():
     """
     Parses the version out of libjsonnet.h. This is a copy/paste from official setup.py.
     """
@@ -64,6 +64,15 @@ def get_version():
                 return v_code
 
 
+post_release_segment = ""  # ".post0"
+"""
+The post release segment of jsonnetbin, appended after version of jsonnet.
+
+It should be defined to release a new version of jsonnetbin packages, but jsonnet version is still the same.
+
+`See PEP 440 Post Releases <https://www.python.org/dev/peps/pep-0440/#post-releases>`_.
+"""
+
 setup(
     name="jsonnetbin",
     url="https://github.com/mcovalt/jsonnetbin",
@@ -73,7 +82,7 @@ setup(
     long_description_content_type='text/markdown',
     author="Matt Covalt",
     author_email="mcovalt@mailbox.org",
-    version=get_version(),
+    version=get_libjsonnet_version() + post_release_segment,
     ext_modules=[
         Extension(
             "_jsonnet",
