@@ -47,6 +47,9 @@ class BuildCLib(build_clib):
 
 DIR = os.path.abspath(os.path.dirname(__file__))
 
+with open(os.path.join(DIR, 'README.md'), encoding='utf-8') as f:
+    readme = f.read()
+
 
 def get_version():
     """
@@ -66,6 +69,8 @@ setup(
     url="https://github.com/mcovalt/jsonnetbin",
     description="An UNOFFICIAL Python interface to Jsonnet, "
                 "available as whl packages for Mac, Linux and Windows.",
+    long_description=readme,
+    long_description_content_type='text/markdown',
     author="Matt Covalt",
     author_email="mcovalt@mailbox.org",
     version=get_version(),
