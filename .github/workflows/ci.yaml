@@ -1,0 +1,87 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  cibuildwheel:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+
+    name: Build wheel (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Install build dependencies
+        run: |
+          pip install --upgrade pip setuptools wheel cibuildwheel
+      - name: Build wheel
+        run: |
+          cibuildwheel --output-dir dist
+        env:
+          CIBW_BUILD: cp3?-* pp3?-*
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
+
+  sdist:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+
+    name: Build sdist
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Install build dependencies
+        run: |
+          pip install --upgrade pip setuptools
+      - name: Build wheel
+        run: |
+          python setup.py sdist
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
+
+  release:
+    if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' }}
+    needs: [cibuildwheel, sdist]
+
+    name: Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: dist
+          path: dist
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Install publish dependencies
+        run: |
+          pip install twine
+      - name: Check package
+        run: |
+          twine check --strict dist/*
+      - name: Upload to PyPI
+        run: |
+          twine upload --verbose --skip-existing dist/*
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}

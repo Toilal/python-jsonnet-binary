@@ -1,3 +1,11 @@
-include jsonnet/LICENSE
-include jsonnet/third_party/json/LICENSE
-include jsonnet/third_party/md5/LICENSE
+recursive-include LICENSE
+recursive-include jsonnet *.c
+recursive-include jsonnet *.cpp
+recursive-include jsonnet *.h
+recursive-include jsonnet *.hpp
+recursive-include jsonnet *.jsonnet
+recursive-exclude jsonnet *test*
+prune jsonnet/case_studies
+prune jsonnet/cmd
+prune jsonnet/test_cmd
+
