@@ -66,22 +66,24 @@ def get_libjsonnet_version():
 
 post_release_segment = ""  # ".post0"
 """
-The post release segment of jsonnetbin, appended after version of jsonnet.
+The post release segment of jsonnet-binary, appended after version of jsonnet.
 
-It should be defined to release a new version of jsonnetbin packages, but jsonnet version is still the same.
+It should be defined to release a new version of jsonnet-binary packages, but jsonnet version is still the same.
 
 `See PEP 440 Post Releases <https://www.python.org/dev/peps/pep-0440/#post-releases>`_.
 """
 
 setup(
-    name="jsonnetbin",
-    url="https://github.com/mcovalt/jsonnetbin",
+    name="jsonnet-binary",
+    url="https://github.com/Toilal/python-jsonnet-binary",
     description="An UNOFFICIAL Python interface to Jsonnet, "
                 "available as whl packages for Mac, Linux and Windows.",
     long_description=readme,
     long_description_content_type='text/markdown',
     author="Matt Covalt",
     author_email="mcovalt@mailbox.org",
+    maintainer="Rémi Alvergnat",
+    maintainer_email="toilal.dev@gmail.com",
     version=get_libjsonnet_version() + post_release_segment,
     ext_modules=[
         Extension(
